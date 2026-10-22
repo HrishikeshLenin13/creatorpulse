@@ -1,0 +1,94 @@
+CreatorPulse verification — October 22, 2026
+
+Changed branch: codex/video-link-experience
+Changed branch/field: POST /api/analytics, URL validation, provider/source, metrics nullability, auth status, dashboard interactions.
+Original source: 138d6b0cd23ac4a965462d98822acd9920a15092
+Original analyzer SHA-256: de3d50e2ae112e524c94e8ed11106c9fd49d483120a83f83e1f3dafd67fb6822
+Modified analyzer SHA-256: ceb2b612d3d60c27a30ea47fa3a96da76ed51e57c63cec7b26e620f1e1081930
+Original archive SHA-256: ac30537ad795d5a141ae15b3c7baf1fa2435decafbecd6dd7ae8c53de3d71f32
+The original source remains in Git history and the local BASELINE.tar; the active source and MODIFIED_FILE remain changed.
+
+Four artifacts:
+MODIFIED_FILE: /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/MODIFIED_FILE
+DIFF_FILE: /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/DIFF_FILE
+VERIFICATION.txt: /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/VERIFICATION.txt
+ROLLBACK.sh: /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/ROLLBACK.sh (executable)
+MODIFIED_FILE is a byte-for-byte copy of the changed analytics route.
+DIFF_FILE is the complete application source diff against the original commit, excluding evidence artifacts. It uses zero context; apply to a separate baseline with git apply --unidiff-zero.
+
+All commands below ran in /Users/HrishiL/Documents/ChatGPT/crpluse.
+Input for the deterministic BASELINE/MODIFIED/ROLLBACK comparison:
+https://www.tiktok.com/@scout2015/video/6718335390845095173
+Injected upstream fixture: {"title":"Fixture caption","author_name":"Fixture creator"}
+This comparison is deterministic and is not represented as a real network lookup.
+
+BASELINE
+Command: node --import tsx /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/verify-behavior.mjs /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/baseline-check
+Literal output: MOCK provider=tiktok-provider views=295500 title=Day in the life of a creator
+Exit status: 0
+Baseline build command: npm run build
+Literal failure: Type error: 'ok' is specified more than once, so this usage will be overwritten.
+File/line: app/api/analytics/route.ts:28:7
+Exit status: 1
+Original npm install succeeded; full audit reported 9 advisories, including 1 critical and 6 high.
+
+MODIFIED
+Command: node --import tsx /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/verify-behavior.mjs /Users/HrishiL/Documents/ChatGPT/crpluse
+Literal output: REAL source=public-oembed views=null title=Fixture caption
+Exit status: 0
+Restored semantics: none; this is the active real-provider implementation, with unavailable counts left null.
+
+ROLLBACK (separate marked fixture; no reset/revert of the active workspace)
+Setup: copied the modified analytics route to evidence/rollback-check/app/api/analytics/route.ts and created .creatorpulse-rollback-fixture.
+Command: /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/ROLLBACK.sh /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/rollback-check
+Literal output: ROLLBACK_OK baseline=138d6b0cd23ac4a965462d98822acd9920a15092 analyzer_sha256=de3d50e2ae112e524c94e8ed11106c9fd49d483120a83f83e1f3dafd67fb6822
+Exit status: 0
+Command: node --import tsx /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/verify-behavior.mjs /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/rollback-check
+Literal output: MOCK provider=tiktok-provider views=295500 title=Day in the life of a creator
+Exit status: 0
+Restored behavior/status: the separate fixture exactly restores the original analyzer hash and original mock analytics behavior. It deliberately restores the old prototype, not a production-ready application. The active route retains the modified hash above.
+
+Final local checks (all exit status 0):
+- npm ci: added 364 packages, and audited 365 packages. No incompatible peer dependency overrides after retaining ESLint 9.
+- npm run lint: eslint .; no diagnostics.
+- npm run typecheck: tsc --noEmit; no diagnostics.
+- npm test: tests 51; pass 51; fail 0; skipped 0.
+- npm run build: Compiled successfully; generated 14 static pages; completed production build.
+- npm run test:e2e: 16 passed (10.1s), desktop and mobile Chromium.
+- npm audit --omit=dev: found 0 vulnerabilities.
+- git diff --check: no output.
+
+Live browser command: node /Users/HrishiL/Documents/ChatGPT/crpluse/evidence/live-smoke.mjs
+Inputs: https://youtu.be/jNQXAC9IVRw and https://www.tiktok.com/@scout2015/video/6718335390845095173
+Literal output:
+LIVE_UI_YOUTUBE=PASS title=Me at the zoo
+LIVE_REPORT_AXE=[]
+LIVE_UI_TIKTOK=PASS embed confirmed, caption unavailable
+PAGE_ERRORS=[]
+Exit status: 0
+These real requests passed through browser -> production API -> official platform -> report. No YouTube statistics key was present; counts correctly remained unavailable. TikTok returned a current embed-only response; no caption was fabricated.
+
+Coverage:
+- Full/short URL parsing; HTTPS/host/path allowlist; credentials/ports/loopback/link-local/foreign redirects; bounded redirect loops.
+- Metadata-only and statistics-enabled fixtures; hidden/malformed counts; upstream timeouts, private videos, malformed JSON, oversized streams.
+- API malformed input, body limits, content type, cross-origin rejection, safe error status, origin/Host reconstruction regression, fail-closed auth.
+- Weighted engagement vs interactions; zero/missing denominators; revenue assumptions; UTC sample windows; CSV escaping; corrupt browser storage.
+- Navigation, actual filter changes, content search/details/sorting controls, downloads, report success/failure/persistence/deletion, revenue validation, password-free public mode.
+- WCAG A/AA automated scans across landing, dashboard, analyzer, revenue, and settings at desktop/mobile sizes; real report scan also passed.
+- Desktop/mobile screenshots visually inspected; mobile table intentionally scrolls horizontally without page overflow.
+
+GitHub milestones:
+58074ec — Build real video-link reports and polished creator workspace
+62458c5 — Verify desktop and mobile workflows, accessibility, and provider-origin handling
+Both pushed to origin/codex/video-link-experience; main is unchanged.
+GitHub Actions run: https://github.com/HrishikeshLenin13/creatorpulse/actions/runs/39866547097
+Remote CI status: completed / success on Ubuntu, Node 22.
+Command: gh run watch 39866547097 --exit-status
+Literal final result: verify in 1m35s; all install/lint/typecheck/test/build/browser/production-audit steps passed.
+Exit status: 0
+
+Release assessment: implemented and locally tested public-link MVP; not a complete private-account analytics SaaS or a verified deployment.
+Optional environment: YOUTUBE_API_KEY, server-only, YouTube Data API v3 enabled and restricted.
+Not implemented: private TikTok OAuth/metrics, cloud authentication/database/sync, billing, actual earnings, retention/demographics, audiovisual AI, uploads, or model inference.
+Remaining operational work: distributed/edge rate limiting, nonce-based CSP, platform approvals and tenant-isolated encrypted persistence for private accounts, deployment verification/monitoring, manual assistive-technology review.
+Full audit still reports five development-only advisories through Next ESLint -> fast-glob -> micromatch -> braces. Current registry braces version has no patched release. Lint patterns are repository-controlled. Production audit is clean. ESLint 9 is retained for peer compatibility; revisit when bundled plugins support ESLint 10.
