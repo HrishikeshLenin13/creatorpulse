@@ -5,3 +5,14 @@ out/
 .env.local
 .DS_Store
 npm-debug.log*
+.env.*
+!.env.example
+*.tsbuildinfo
+playwright-report/
+test-results/
+evidence/*.tar
+evidence/*-audit.json
+evidence/*.log
+evidence/*.png
+evidence/rollback-check/
+evidence/MODIFIED_FILE

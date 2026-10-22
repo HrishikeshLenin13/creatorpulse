@@ -1,158 +1,280 @@
 "use client";
-
-import { useMemo, useState } from 'react';
-import { formatCompactNumber, formatCurrency } from '@/lib/utils';
-import { mockVideoMetrics, revenueSources } from '@/lib/data';
-
-export function AnalyticsDashboard() {
-  const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
-  const [filter, setFilter] = useState<'7D' | '30D' | '90D'>('30D');
-
-  const stats = useMemo(
-    () => [
-      { label: 'Total views', value: '1.2M', delta: '+18.4%' },
-      { label: 'Avg engagement', value: '12.1%', delta: '+2.3%' },
-      { label: 'Watch time', value: '42.6h', delta: '+11.8%' },
-      { label: 'Est. earnings', value: '$4,860', delta: '+9.7%' },
-    ],
-    [],
-  );
-
+import Link from "next/link";
+import { useState } from "react";
+import { postsInWindow, type SamplePost } from "@/lib/data";
+import { engagementRate, relativeLift } from "@/lib/metrics";
+import { csvCell, downloadFile } from "@/lib/export";
+import { formatCompactNumber } from "@/lib/utils";
+import { Icon } from "./Icon";
+import { PerformanceChart } from "./PerformanceChart";
+export function ContentTable({ posts }: { posts: SamplePost[] }) {
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("date");
+  const [selected, setSelected] = useState<string | null>(null);
+  const filtered = posts
+    .filter((p) =>
+      (p.title + p.category).toLowerCase().includes(search.toLowerCase()),
+    )
+    .sort((a, b) =>
+      sort === "views"
+        ? b.views - a.views
+        : sort === "engagement"
+          ? (engagementRate(b) ?? 0) - (engagementRate(a) ?? 0)
+          : b.date.localeCompare(a.date),
+    );
   return (
-    <div className="workspace-shell">
-      <div className="workspace-toolbar glass-panel">
-        <div className="toolbar-left">
-          <div className="workspace-badge">Live sync</div>
-          <span className="muted-label">Creator workspace</span>
+    <section className="panel content-panel">
+      <div className="panel-heading">
+        <div>
+          <h2>Content performance</h2>
+          <p>Sample posts · Lifetime metrics</p>
         </div>
-
-        <div className="toolbar-tabs">
-          {['Overview', 'Posts', 'Audience', 'Revenue'].map((tab) => (
-            <button
-              key={tab}
-              className={selectedSegment === tab ? 'tab active' : 'tab'}
-              onClick={() => setSelectedSegment(tab as any)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        <div className="toolbar-actions">
-          <select value={filter} onChange={(event) => setFilter(event.target.value as any)}>
-            <option value="7D">7D</option>
-            <option value="30D">30D</option>
-            <option value="90D">90D</option>
-          </select>
-          <button className="primary-btn small-btn">Export</button>
-        </div>
+        <button
+          className="button secondary small"
+          onClick={() =>
+            downloadFile(
+              "creatorpulse-sample-content.csv",
+              [
+                [
+                  "Source",
+                  "Title",
+                  "Published (UTC)",
+                  "Views",
+                  "Likes",
+                  "Comments",
+                  "Shares",
+                  "Engagement by views (%)",
+                ],
+                ...filtered.map((p) => [
+                  "SAMPLE",
+                  p.title,
+                  p.date,
+                  p.views,
+                  p.likes,
+                  p.comments,
+                  p.shares,
+                  engagementRate(p)?.toFixed(2) ?? "",
+                ]),
+              ]
+                .map((row) => row.map(csvCell).join(","))
+                .join("\r\n"),
+              "text/csv;charset=utf-8",
+            )
+          }
+        >
+          <Icon name="download" size={16} />
+          Export CSV
+        </button>
       </div>
-
-      <div className="stats-grid">
-        {stats.map((stat) => (
-          <div key={stat.label} className="stat-card glass-panel">
-            <span className="muted-label">{stat.label}</span>
-            <div className="stat-row">
-              <strong>{stat.value}</strong>
-              <span className="delta up">{stat.delta}</span>
-            </div>
-          </div>
-        ))}
+      <div className="table-controls">
+        <label className="search-field">
+          <Icon name="search" size={17} />
+          <input
+            aria-label="Search content"
+            placeholder="Search content or category…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
+        <select
+          aria-label="Sort content"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="date">Most recent</option>
+          <option value="views">Most viewed</option>
+          <option value="engagement">Highest engagement</option>
+        </select>
       </div>
-
-      <div className="content-grid">
-        <div className="panel glass-panel large-panel">
-          <div className="panel-head">
-            <div>
-              <span className="muted-label">Performance trend</span>
-              <h2>Weekly reach</h2>
-            </div>
-            <span className="status-pill">Updated 2m ago</span>
-          </div>
-
-          <div className="trend-panel">
-            <div className="trend-bars">
-              {[82, 64, 74, 91, 68, 88, 94].map((value, idx) => (
-                <div key={idx} className="bar-cluster">
-                  <div className="bar-track">
-                    <span style={{ height: `${value}%` }} />
-                  </div>
-                  <small>{['M', 'T', 'W', 'T', 'F', 'S', 'S'][idx]}</small>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Video</th>
+              <th>Views</th>
+              <th>Likes</th>
+              <th>Comments</th>
+              <th>Shares</th>
+              <th>Engagement</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((p) => (
+              <tr key={p.id}>
+                <td>
+                  <button
+                    className="post-button"
+                    aria-expanded={selected === p.id}
+                    onClick={() => setSelected(selected === p.id ? null : p.id)}
+                  >
+                    <span className={"post-art " + p.color}>
+                      <Icon name="play" size={20} />
+                    </span>
+                    <span>
+                      <strong>{p.title}</strong>
+                      <small>
+                        {p.category} · {p.date}
+                      </small>
+                      {selected === p.id && (
+                        <span className="post-detail">
+                          Sample record. Engagement = (
+                          {p.likes.toLocaleString()} likes + {p.comments}{" "}
+                          comments + {p.shares.toLocaleString()} shares) ÷{" "}
+                          {p.views.toLocaleString()} views × 100. No retention
+                          or earnings data.
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </td>
+                <td>{formatCompactNumber(p.views)}</td>
+                <td>{formatCompactNumber(p.likes)}</td>
+                <td>{formatCompactNumber(p.comments)}</td>
+                <td>{formatCompactNumber(p.shares)}</td>
+                <td>
+                  <span className="engagement">
+                    {engagementRate(p)?.toFixed(2)}%
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {!filtered.length && (
+        <p className="empty-inline">
+          No matching posts. Try another title or category.
+        </p>
+      )}
+      <div className="table-footer">
+        Showing {filtered.length} of {posts.length} sample posts{" "}
+        <span>Engagement = (likes + comments + shares) ÷ views</span>
+      </div>
+    </section>
+  );
+}
+export function AnalyticsDashboard({
+  contentOnly = false,
+}: {
+  contentOnly?: boolean;
+}) {
+  const [days, setDays] = useState(30);
+  const posts = postsInWindow(days);
+  const totals = posts.reduce(
+    (a, p) => ({
+      views: a.views + p.views,
+      likes: a.likes + p.likes,
+      comments: a.comments + p.comments,
+      shares: a.shares + p.shares,
+    }),
+    { views: 0, likes: 0, comments: 0, shares: 0 },
+  );
+  const top = [...posts].sort((a, b) => b.views - a.views)[0];
+  const otherAverage =
+    posts.length > 1 ? (totals.views - top.views) / (posts.length - 1) : 0;
+  const lift = relativeLift(top.views, otherAverage);
+  return (
+    <div className="analytics-stack">
+      <div className="sample-strip">
+        <span>
+          <Icon name="info" size={16} />
+          <strong>Sample workspace</strong> Explore the product with
+          illustrative data. Your video reports stay separate.
+        </span>
+        <select
+          aria-label="Publication window"
+          value={days}
+          onChange={(e) => setDays(Number(e.target.value))}
+        >
+          <option value={7}>Last 7 days</option>
+          <option value={30}>Last 30 days</option>
+          <option value={90}>Last 90 days</option>
+        </select>
+      </div>
+      {!contentOnly && (
+        <>
+          <div className="stats-grid">
+            {[
+              {
+                label: "Total views",
+                value: formatCompactNumber(totals.views),
+                detail: `Across ${posts.length} sample posts`,
+                icon: "chart" as const,
+              },
+              {
+                label: "Engagement by views",
+                value: `${engagementRate(totals)?.toFixed(2)}%`,
+                detail: "Weighted across selected posts",
+                icon: "heart" as const,
+              },
+              {
+                label: "Total shares",
+                value: formatCompactNumber(totals.shares),
+                detail: "Sample platform count",
+                icon: "external" as const,
+              },
+              {
+                label: "Avg. views per post",
+                value: formatCompactNumber(totals.views / posts.length),
+                detail: "Lifetime views / post count",
+                icon: "play" as const,
+              },
+            ].map((s) => (
+              <section className="stat-card" key={s.label}>
+                <div>
+                  <span>{s.label}</span>
+                  <Icon name={s.icon} size={18} />
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="panel glass-panel side-panel">
-          <div className="panel-head">
-            <div>
-              <span className="muted-label">Revenue mix</span>
-              <h2>$4,860</h2>
-            </div>
-          </div>
-
-          <div className="revenue-list">
-            {revenueSources.map((source) => (
-              <div key={source.label}>
-                <span>{source.label}</span>
-                <strong>{source.value}</strong>
-              </div>
+                <strong>{s.value}</strong>
+                <small>{s.detail}</small>
+              </section>
             ))}
           </div>
-        </div>
-      </div>
-
-      <div className="table-panel glass-panel">
-        <div className="panel-head">
-          <div>
-            <span className="muted-label">Recent content</span>
-            <h2>Top-performing posts</h2>
+          <div className="insight-grid">
+            <section className="panel chart-panel">
+              <div className="panel-heading">
+                <div>
+                  <h2>A little perspective on your reach</h2>
+                  <p>Lifetime views grouped by post publication date</p>
+                </div>
+                <span className="legend">
+                  <i /> Sample views
+                </span>
+              </div>
+              <PerformanceChart posts={posts} />
+              <p className="chart-footnote">
+                Publication window ends Oct 22, 2026 (UTC). Not a historical
+                daily-view series.
+              </p>
+            </section>
+            <section className="insight-panel">
+              <div className="insight-title">
+                <Icon name="bolt" size={18} /> From the sample data
+              </div>
+              <h2>Worth a second look.</h2>
+              <p className="insight-big">
+                {lift?.toFixed(0)}%
+                <span>
+                  more views than the other selected posts, on average
+                </span>
+              </p>
+              <p>
+                “{top.title}” leads this set with{" "}
+                <strong>{formatCompactNumber(top.views)} views.</strong>
+              </p>
+              <div className="insight-divider" />
+              <p className="insight-note">
+                Try a follow-up in the same format. Treat it as an experiment,
+                not proof of what caused the lift.
+              </p>
+              <Link href="/dashboard/content" className="insight-link">
+                Explore the content <Icon name="arrow" size={16} />
+              </Link>
+            </section>
           </div>
-        </div>
-
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Video</th>
-                <th>Views</th>
-                <th>Likes</th>
-                <th>Comments</th>
-                <th>Shares</th>
-                <th>Engagement</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockVideoMetrics.map((video) => (
-                <tr key={video.id}>
-                  <td>{video.title}</td>
-                  <td>{formatCompactNumber(video.views)}</td>
-                  <td>{formatCompactNumber(video.likes)}</td>
-                  <td>{formatCompactNumber(video.comments)}</td>
-                  <td>{formatCompactNumber(video.shares)}</td>
-                  <td>
-                    <span className="engagement-pill">{video.engagementRate}%</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="bottom-strip">
-        <div className="mini-panel glass-panel">
-          <span className="muted-label">Avg watch time</span>
-          <strong>{mockVideoMetrics[0].avgWatchDuration}s</strong>
-          <small>Best format: storytelling + voiceover</small>
-        </div>
-        <div className="mini-panel glass-panel">
-          <span className="muted-label">Predicted revenue</span>
-          <strong>{formatCurrency(2860)}</strong>
-          <small>Projected from current content velocity</small>
-        </div>
-      </div>
+        </>
+      )}
+      <ContentTable posts={posts} />
     </div>
   );
 }
