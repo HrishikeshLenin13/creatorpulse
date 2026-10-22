@@ -1,54 +1,41 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { fetchAnalyticsSnapshot } from '@/lib/analytics';
+
 export async function GET() {
-  return Response.json({
+  return NextResponse.json({
     ok: true,
-    service: 'CreatorPulse',
-    version: '0.2.0',
-    summary: {
-      totalViews: 1235000,
-      avgEngagement: 12.1,
-      watchTimeHours: 42.6,
-      estimatedRevenue: 4860,
-      totalPosts: 3,
-    },
-    posts: [
-      {
-        id: '1',
-        title: 'Day in the life of a creator',
-        views: 128400,
-        engagementRate: 12.4,
-        estimatedEarnings: 286.5,
-      },
-      {
-        id: '2',
-        title: '3 hacks for better content',
-        views: 92600,
-        engagementRate: 11.1,
-        estimatedEarnings: 201.2,
-      },
-      {
-        id: '3',
-        title: 'Creator gear setup tour',
-        views: 74500,
-        engagementRate: 10.8,
-        estimatedEarnings: 164.5,
-      },
-    ],
+    service: 'CreatorPulse analytics',
+    version: '1.0.0',
+    status: 'healthy',
   });
 }
 
-export async function POST(request: Request) {
-  const body = (await request.json()) as { url?: string };
-  const url = body.url ?? '';
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { url } = body as { url?: string };
 
-  return Response.json({
-    ok: true,
-    url,
-    summary: {
-      totalViews: 128400,
-      avgEngagement: 12.4,
-      watchTimeHours: 32.8,
-      estimatedRevenue: 286.5,
-    },
-    message: 'Metrics received successfully for the provided creator URL.',
-  });
+    if (!url || typeof url !== 'string' || !url.includes('tiktok.com')) {
+      return NextResponse.json(
+        { ok: false, message: 'Invalid TikTok URL provided.' },
+        { status: 400 },
+      );
+    }
+
+    const snapshot = await fetchAnalyticsSnapshot(url);
+
+    return NextResponse.json({
+      ok: true,
+      ...snapshot,
+      message: 'TikTok analytics snapshot generated successfully.',
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: error instanceof Error ? error.message : 'Failed to analyze content.',
+      },
+      { status: 500 },
+    );
+  }
 }
