@@ -1,22 +1,22 @@
 # CreatorPulse
 
-A creator analytics dashboard concept for tracking TikTok performance, engagement, and monetization estimates.
+A polished creator analytics dashboard concept for TikTok content performance, engagement quality, and monetization estimates.
 
-## Features
+## Product goals
 
-- TikTok URL input
-- Views, likes, comments, shares overview
-- Engagement rate tracking
-- Estimated revenue projections
-- Content performance dashboard
+- Track performance for creator content
+- Measure views, engagement, retention, and growth
+- Estimate potential earnings with transparent assumptions
+- Provide a premium SaaS-style dashboard experience
 
 ## Stack
 
-- Next.js
+- Next.js 14
 - TypeScript
 - Tailwind CSS
+- Recharts
 
-## Getting started
+## Local development
 
 ```bash
 npm install
@@ -27,4 +27,4 @@ Then open http://localhost:3000
 
 ## Notes
 
-This is an MVP dashboard using realistic mock data for the front-end experience. It is designed to be extended with official creator API access or authorized analytics integrations.
+This is a clean MVP and front-end product concept that uses realistic mock data. It is designed to be extended with official creator data sources or authorized analytics integrations.

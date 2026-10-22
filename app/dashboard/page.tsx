@@ -1,3 +1,4 @@
+import { PerformanceChart } from '@/components/PerformanceChart';
 import { mockVideoMetrics } from '@/lib/data';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 
@@ -8,7 +9,11 @@ const dashboardStats = [
   { label: 'Est. earnings', value: '$4,860', delta: '+9.7%' },
 ];
 
-const performanceBars = [82, 64, 74, 91, 68, 88, 94];
+const revenueSources = [
+  { label: 'Organic', value: '$2,430' },
+  { label: 'Sponsored', value: '$1,690' },
+  { label: 'Affiliate', value: '$740' },
+];
 
 export default function DashboardPage() {
   return (
@@ -67,15 +72,8 @@ export default function DashboardPage() {
               <span className="status-pill">Updated 2m ago</span>
             </div>
 
-            <div className="bars-wrap">
-              {performanceBars.map((value, idx) => (
-                <div key={idx} className="bar-cluster">
-                  <div className="bar-track">
-                    <span style={{ height: `${value}%` }} />
-                  </div>
-                  <small>{['M','T','W','T','F','S','S'][idx]}</small>
-                </div>
-              ))}
+            <div className="chart-panel">
+              <PerformanceChart />
             </div>
           </div>
 
@@ -88,18 +86,12 @@ export default function DashboardPage() {
             </div>
 
             <div className="revenue-list">
-              <div>
-                <span>Organic</span>
-                <strong>$2,430</strong>
-              </div>
-              <div>
-                <span>Sponsored</span>
-                <strong>$1,690</strong>
-              </div>
-              <div>
-                <span>Affiliate</span>
-                <strong>$740</strong>
-              </div>
+              {revenueSources.map((source) => (
+                <div key={source.label}>
+                  <span>{source.label}</span>
+                  <strong>{source.value}</strong>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -1,3 +1,13 @@
+const performanceSeries = [
+  { day: 'Mon', reach: 42 },
+  { day: 'Tue', reach: 55 },
+  { day: 'Wed', reach: 64 },
+  { day: 'Thu', reach: 72 },
+  { day: 'Fri', reach: 80 },
+  { day: 'Sat', reach: 92 },
+  { day: 'Sun', reach: 88 },
+];
+
 export type VideoMetrics = {
   id: string;
   title: string;
@@ -13,6 +23,8 @@ export type VideoMetrics = {
   trend: number[];
   lastUpdated: string;
 };
+
+export const mockSeries = performanceSeries;
 
 export const mockVideoMetrics: VideoMetrics[] = [
   {

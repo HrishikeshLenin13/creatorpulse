@@ -1,12 +1,57 @@
 import Link from 'next/link';
-import { mockVideoMetrics } from '@/lib/data';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
+import { mockVideoMetrics } from '@/lib/data';
 
 const creatorHighlights = [
   { name: 'Audience growth', value: '+34.2%', tone: 'up' },
   { name: 'Avg CTR', value: '8.4%', tone: 'up' },
   { name: 'Watch time', value: '24.8m', tone: 'neutral' },
   { name: 'Revenue trend', value: '+19.1%', tone: 'up' },
+];
+
+const featureList = [
+  {
+    title: 'Performance tracking',
+    description: 'Live monitoring of views, likes, watch time, and audience engagement across your most recent posts.',
+    tone: 'cyan',
+    symbol: '↗',
+  },
+  {
+    title: 'Content comparison',
+    description: 'Compare posts side-by-side to find the hooks, formats, and pacing that consistently create lift.',
+    tone: 'violet',
+    symbol: '◎',
+  },
+  {
+    title: 'Monetization estimates',
+    description: 'Understand revenue potential with transparent CPM-style estimates and creator-focused projections.',
+    tone: 'green',
+    symbol: '$',
+  },
+];
+
+const pricingPlans = [
+  {
+    name: 'Starter',
+    price: '$0',
+    subtitle: 'For new creators',
+    features: ['3 tracked videos', 'Basic analytics', 'Weekly summary'],
+    highlight: false,
+  },
+  {
+    name: 'Growth',
+    price: '$29',
+    subtitle: 'For growing accounts',
+    features: ['Unlimited content tracking', 'Trend insights', 'Revenue forecasting'],
+    highlight: true,
+  },
+  {
+    name: 'Scale',
+    price: '$79',
+    subtitle: 'For power creators',
+    features: ['Advanced cohort analysis', 'Team access', 'Priority support'],
+    highlight: false,
+  },
 ];
 
 export default function HomePage() {
@@ -41,9 +86,9 @@ export default function HomePage() {
         <section className="hero">
           <div className="hero-copy">
             <span className="eyebrow">Better content decisions</span>
-            <h1>Turn every TikTok post into a smarter growth signal.</h1>
+            <h1>Turn every TikTok post into smarter growth.</h1>
             <p>
-              Measure real performance, compare content, and estimate monetization with a clean dashboard built for creators.
+              Measure real performance, compare content, and estimate monetization with a polished analytics dashboard built for creators.
             </p>
 
             <div className="cta-row">
@@ -92,7 +137,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="sparkline">
+            <div className="sparkline" aria-label="Content performance trend">
               {mainVideo.trend.map((point, index) => (
                 <span
                   key={index}
@@ -132,27 +177,38 @@ export default function HomePage() {
           </div>
 
           <div className="feature-list glass-panel">
-            <div className="list-item">
-              <div className="icon-box cyan">↗</div>
-              <div>
-                <h3>Performance tracking</h3>
-                <p>Live monitoring of views, likes, watch time, and audience engagement.</p>
+            {featureList.map((feature) => (
+              <div key={feature.title} className="list-item">
+                <div className={`icon-box ${feature.tone}`}>{feature.symbol}</div>
+                <div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
               </div>
-            </div>
-            <div className="list-item">
-              <div className="icon-box violet">◎</div>
-              <div>
-                <h3>Content comparison</h3>
-                <p>Compare posts side-by-side to find the hooks and formats that convert.</p>
+            ))}
+          </div>
+        </section>
+
+        <section id="pricing" className="pricing-section">
+          <div className="section-header">
+            <span className="eyebrow">Plans</span>
+            <h2>Simple pricing for creators at every stage.</h2>
+          </div>
+
+          <div className="pricing-grid">
+            {pricingPlans.map((plan) => (
+              <div key={plan.name} className={`pricing-card glass-panel ${plan.highlight ? 'highlight' : ''}`}>
+                <span className="plan-name">{plan.name}</span>
+                <div className="plan-price">{plan.price}</div>
+                <p className="plan-subtitle">{plan.subtitle}</p>
+                <ul>
+                  {plan.features.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <button className={plan.highlight ? 'primary-btn' : 'ghost-btn'}>Choose plan</button>
               </div>
-            </div>
-            <div className="list-item">
-              <div className="icon-box green">$</div>
-              <div>
-                <h3>Monetization estimates</h3>
-                <p>Transparent revenue model estimates using CPM-style assumptions.</p>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
       </div>
