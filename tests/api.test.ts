@@ -65,3 +65,24 @@ test("API success uses provider data and noncacheable response", async () => {
     globalThis.fetch = original;
   }
 });
+test("same-origin browser requests survive internal hostname reconstruction", async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () =>
+    new Response(
+      JSON.stringify({
+        title: "Real provider fixture",
+        author_name: "Creator",
+      }),
+    );
+  try {
+    const response = await POST(
+      request(JSON.stringify({ url: "https://youtu.be/jNQXAC9IVRw" }), {
+        host: "127.0.0.1:3000",
+        origin: "http://127.0.0.1:3000",
+      }),
+    );
+    assert.equal(response.status, 200);
+  } finally {
+    globalThis.fetch = original;
+  }
+});

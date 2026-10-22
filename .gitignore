@@ -16,3 +16,5 @@ evidence/*.log
 evidence/*.png
 evidence/rollback-check/
 evidence/MODIFIED_FILE
+evidence/baseline-check/
+evidence/*-before.json

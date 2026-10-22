@@ -15,7 +15,10 @@ export async function GET() {
 export async function POST(request: Request) {
   const headers = { "Cache-Control": "no-store" };
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin)
+  // Next may reconstruct request.url with an internal hostname behind a proxy.
+  // The browser-controlled Origin must match the requested Host, not that internal URL.
+  const host = request.headers.get("host") ?? new URL(request.url).host;
+  if (origin && origin !== `https://${host}` && origin !== `http://${host}`)
     return Response.json(
       { ok: false, message: "Cross-origin requests are not accepted." },
       { status: 403, headers },
