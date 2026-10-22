@@ -1,6 +1,8 @@
 import { PerformanceChart } from '@/components/PerformanceChart';
-import { mockVideoMetrics } from '@/lib/data';
-import { formatCompactNumber, formatCurrency } from '@/lib/utils';
+import { Sidebar } from '@/components/Sidebar';
+import { StatCard } from '@/components/StatCard';
+import { mockVideoMetrics, revenueSources } from '@/lib/data';
+import { formatCompactNumber } from '@/lib/utils';
 
 const dashboardStats = [
   { label: 'Total views', value: '1.2M', delta: '+18.4%' },
@@ -9,37 +11,10 @@ const dashboardStats = [
   { label: 'Est. earnings', value: '$4,860', delta: '+9.7%' },
 ];
 
-const revenueSources = [
-  { label: 'Organic', value: '$2,430' },
-  { label: 'Sponsored', value: '$1,690' },
-  { label: 'Affiliate', value: '$740' },
-];
-
 export default function DashboardPage() {
   return (
     <main className="dashboard-shell">
-      <aside className="sidebar glass-panel">
-        <div className="brand-wrap sidebar-brand">
-          <div className="brand-mark">C</div>
-          <div>
-            <div className="brand-name">CreatorPulse</div>
-          </div>
-        </div>
-
-        <nav className="sidebar-nav">
-          <span className="nav-label">Overview</span>
-          <a className="side-link active" href="#">Dashboard</a>
-          <a className="side-link" href="#">Content</a>
-          <a className="side-link" href="#">Audience</a>
-          <a className="side-link" href="#">Monetization</a>
-        </nav>
-
-        <div className="sidebar-card">
-          <span className="muted-label">Current focus</span>
-          <strong>Short-form growth</strong>
-          <small>Best performing content format this month</small>
-        </div>
-      </aside>
+      <Sidebar />
 
       <section className="dashboard-main">
         <header className="dashboard-header">
@@ -52,13 +27,7 @@ export default function DashboardPage() {
 
         <div className="stats-grid">
           {dashboardStats.map((stat) => (
-            <div key={stat.label} className="stat-card glass-panel">
-              <span className="muted-label">{stat.label}</span>
-              <div className="stat-row">
-                <strong>{stat.value}</strong>
-                <span className="delta up">{stat.delta}</span>
-              </div>
-            </div>
+            <StatCard key={stat.label} label={stat.label} value={stat.value} delta={stat.delta} />
           ))}
         </div>
 
@@ -137,4 +106,3 @@ export default function DashboardPage() {
     </main>
   );
 }
-

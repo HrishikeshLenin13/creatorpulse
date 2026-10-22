@@ -1,13 +1,3 @@
-const performanceSeries = [
-  { day: 'Mon', reach: 42 },
-  { day: 'Tue', reach: 55 },
-  { day: 'Wed', reach: 64 },
-  { day: 'Thu', reach: 72 },
-  { day: 'Fri', reach: 80 },
-  { day: 'Sat', reach: 92 },
-  { day: 'Sun', reach: 88 },
-];
-
 export type VideoMetrics = {
   id: string;
   title: string;
@@ -24,7 +14,23 @@ export type VideoMetrics = {
   lastUpdated: string;
 };
 
-export const mockSeries = performanceSeries;
+export type DashboardSummary = {
+  totalViews: number;
+  avgEngagement: number;
+  watchTimeHours: number;
+  estimatedRevenue: number;
+  totalPosts: number;
+};
+
+export const performanceSeries = [
+  { day: 'Mon', reach: 42 },
+  { day: 'Tue', reach: 55 },
+  { day: 'Wed', reach: 64 },
+  { day: 'Thu', reach: 72 },
+  { day: 'Fri', reach: 80 },
+  { day: 'Sat', reach: 92 },
+  { day: 'Sun', reach: 88 },
+];
 
 export const mockVideoMetrics: VideoMetrics[] = [
   {
@@ -72,4 +78,18 @@ export const mockVideoMetrics: VideoMetrics[] = [
     trend: [22, 29, 34, 46, 48, 54, 59],
     lastUpdated: '31 mins ago',
   },
+];
+
+export const dashboardSummary: DashboardSummary = {
+  totalViews: 1_235_000,
+  avgEngagement: 12.1,
+  watchTimeHours: 42.6,
+  estimatedRevenue: 4860,
+  totalPosts: mockVideoMetrics.length,
+};
+
+export const revenueSources = [
+  { label: 'Organic', value: '$2,430' },
+  { label: 'Sponsored', value: '$1,690' },
+  { label: 'Affiliate', value: '$740' },
 ];

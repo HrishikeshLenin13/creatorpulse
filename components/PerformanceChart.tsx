@@ -1,21 +1,13 @@
 "use client";
 
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-import { mockSeries } from '@/lib/data';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { performanceSeries } from '@/lib/data';
 
 export function PerformanceChart() {
   return (
-    <div style={{ width: '100%', height: 220 }}>
+    <div className="chart-shell">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={mockSeries} margin={{ top: 20, right: 10, left: -16, bottom: 0 }}>
+        <AreaChart data={performanceSeries} margin={{ top: 20, right: 10, left: -16, bottom: 0 }}>
           <defs>
             <linearGradient id="reachFill" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stopColor="#67e8f9" stopOpacity={0.4} />
@@ -33,14 +25,7 @@ export function PerformanceChart() {
               color: '#f8fafc',
             }}
           />
-          <Area
-            type="monotone"
-            dataKey="reach"
-            stroke="#67e8f9"
-            strokeWidth={3}
-            fill="url(#reachFill)"
-            activeDot={{ r: 6 }}
-          />
+          <Area type="monotone" dataKey="reach" stroke="#67e8f9" strokeWidth={3} fill="url(#reachFill)" activeDot={{ r: 6 }} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

@@ -623,6 +623,11 @@ button, input {
   height: 220px;
 }
 
+.chart-shell {
+  width: 100%;
+  height: 100%;
+}
+
 h2 {
   margin: 8px 0 0;
   font-size: 1.5rem;
