@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
+import { exportPostsCsv } from '@/lib/export';
 
 export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
@@ -18,11 +19,22 @@ export function AnalyticsDashboard() {
     [],
   );
 
+  function downloadPosts() {
+    const url = URL.createObjectURL(new Blob([exportPostsCsv(mockVideoMetrics)], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'creatorpulse-demo-posts.csv';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   return (
     <div className="workspace-shell">
       <div className="workspace-toolbar glass-panel">
         <div className="toolbar-left">
-          <div className="workspace-badge">Live sync</div>
+          <div className="workspace-badge">Demo data</div>
           <span className="muted-label">Creator workspace</span>
         </div>
 
@@ -44,7 +56,7 @@ export function AnalyticsDashboard() {
             <option value="30D">30D</option>
             <option value="90D">90D</option>
           </select>
-          <button className="primary-btn small-btn">Export</button>
+          <button type="button" className="primary-btn small-btn" onClick={downloadPosts}>Export CSV</button>
         </div>
       </div>
 
