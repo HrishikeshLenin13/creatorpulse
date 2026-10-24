@@ -4,7 +4,10 @@ export type ExportPost = {
 };
 
 function csvCell(value: string | number): string {
-  return `"${String(value).replace(/"/g, '""')}"`;
+  const text = String(value);
+  // Prefix formula-like text, including leading control/whitespace characters.
+  const escaped = typeof value === 'string' && (/^\s*[=+@-]/.test(text) || /^[\t\r\n]/.test(text)) ? "'" + text : text;
+  return `"${escaped.replace(/"/g, '""')}"`;
 }
 
 /** Export the displayed sample rows, not a fabricated live-data report. */

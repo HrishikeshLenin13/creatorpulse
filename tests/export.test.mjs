@@ -8,3 +8,10 @@ test('CSV exports displayed metrics and quotes titles', () => {
   assert.ok(csv.includes('"Demo data"'));
   assert.equal(exportPostsCsv([]).split('\r\n').length, 2);
 });
+
+test('formula-like titles stay text when opened in spreadsheets', () => {
+  for (const title of ['=1+1', '+SUM(A1)', '-2+4', '@SUM(A1)', '  =1', '\tvalue']) {
+    const csv = exportPostsCsv([{title, views:10, likes:2, comments:1, shares:0, engagementRate:30}]);
+    assert.ok(csv.split('\r\n')[1].startsWith('"\''));
+  }
+});

@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
     const snapshot = await fetchAnalyticsSnapshot(url);
 
     return NextResponse.json({
-      ok: true,
       ...snapshot,
       message: 'TikTok analytics snapshot generated successfully.',
     });
