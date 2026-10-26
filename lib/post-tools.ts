@@ -20,3 +20,8 @@ export function filterPosts<T extends {title:string}>(posts:readonly T[], query:
   const needles=normalize(query).trim().split(/\s+/).filter(Boolean);
   return posts.filter(post=>{const title=normalize(post.title);return needles.every(needle=>title.includes(needle));});
 }
+
+export function filterPostsByViews<T extends {views:number}>(posts:readonly T[], minimum=0):T[] {
+  if (!Number.isFinite(minimum) || minimum < 0) throw new RangeError('Minimum views must be finite and nonnegative.');
+  return posts.filter(post=>finite(post.views)>=minimum);
+}

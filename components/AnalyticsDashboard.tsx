@@ -3,15 +3,16 @@
 import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
-import { summarizePosts, sortPosts, filterPosts, type PostSortKey } from '@/lib/post-tools';
+import { summarizePosts, sortPosts, filterPosts, filterPostsByViews, type PostSortKey } from '@/lib/post-tools';
 import { exportPostsCsv, exportPostsJson } from '@/lib/export';
 
 export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
   const [sortBy, setSortBy] = useState<PostSortKey>('views');
   const [query,setQuery] = useState('');
+  const [minimumViews,setMinimumViews] = useState(0);
   const [sortDirection,setSortDirection] = useState<'asc'|'desc'>('desc');
-  const visiblePosts = useMemo(() => sortPosts(filterPosts(mockVideoMetrics,query),sortBy,sortDirection),[query,sortBy,sortDirection]);
+  const visiblePosts = useMemo(() => sortPosts(filterPostsByViews(filterPosts(mockVideoMetrics,query),minimumViews),sortBy,sortDirection),[query,sortBy,sortDirection,minimumViews]);
 
   const stats = useMemo(
     () => {
@@ -59,6 +60,8 @@ export function AnalyticsDashboard() {
 
         <div className="toolbar-actions">
           <input aria-label="Search posts" placeholder="Search posts" value={query} onChange={event=>setQuery(event.target.value)} />
+          <label>Minimum views <input aria-label="Minimum views" type="number" min="0" value={minimumViews} onChange={event=>{const value=event.currentTarget.valueAsNumber;setMinimumViews(Number.isFinite(value)?Math.max(0,value):0);}} /></label>
+          <button type="button" className="ghost-btn small-btn" onClick={()=>{setQuery('');setMinimumViews(0);}}>Clear filters</button>
           <select aria-label="Sort posts" value={sortBy} onChange={(event) => setSortBy(event.target.value as PostSortKey)}>
             <option value="views">Views</option>
             <option value="engagementRate">Engagement</option>

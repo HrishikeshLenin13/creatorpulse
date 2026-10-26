@@ -41,3 +41,7 @@ Run from the repository root:
 npm test && npm run typecheck
 ```
 
+
+## Dashboard list controls
+
+Sort direction and minimum views apply to the same visible list used for cards and CSV/JSON exports. Title searches match all normalized terms regardless of order, case, or accents. Clear filters resets the query and view threshold while preserving sort preferences. Number/currency formatters are reused across cells; overflowing positive aggregates saturate at the largest finite number rather than rendering Infinity. All data remains labeled demo.
