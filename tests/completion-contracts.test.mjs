@@ -92,3 +92,7 @@ const a=[post];assert.notEqual(api.sortPosts(a),a);assert.deepEqual(api.sortPost
 test("search-matches-case-insensitively", () => {
 assert.equal(api.filterPosts([post],'CREATOR').length,1);
 });
+
+test("search-matches-terms-regardless-of-order", () => {
+assert.equal(api.filterPosts([post],'gear creator').length,1);
+});
