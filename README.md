@@ -14,7 +14,7 @@ A creator analytics dashboard concept for exploring content performance, engagem
 Requires Node.js 22+ and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
@@ -24,10 +24,14 @@ Open [localhost:3000](http://localhost:3000). The dashboard is at `/dashboard`.
 
 ```sh
 npm test
-npx tsc --noEmit
+npm run typecheck
 npm run build
 ```
 
 ## Stack and limitations
 
-Next.js, React, TypeScript, Tailwind CSS, and Recharts. Revenue values are illustrative estimates, not payment records. Official account connections and production authentication are not implemented.
+Next.js 16, React 19, TypeScript, Tailwind CSS, and Recharts. Revenue values are illustrative estimates, not payment records. Official account connections and production authentication are not implemented.
+
+## Dependency maintenance
+
+The framework and React runtime are pinned in `package-lock.json` for reproducible installs. Next.js 16 no longer provides `next lint`; use the test, typecheck, and build commands above. The existing Tailwind 3 styling is retained rather than applying an untested CSS-framework migration.
