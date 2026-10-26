@@ -180,3 +180,7 @@ for(const value of [-1,NaN,Infinity])assert.equal(utils.estimateEarnings(100,val
 test("earnings-overflow-is-not-presented-as-infinite-revenue", () => {
 assert.equal(utils.estimateEarnings(Number.MAX_VALUE,Number.MAX_VALUE),0);
 });
+
+test("zero-view-estimates-do-not-create-revenue", () => {
+assert.equal(utils.estimateEarnings(0,100),0);assert.equal(utils.formatCurrency(0),'$0.00');
+});
