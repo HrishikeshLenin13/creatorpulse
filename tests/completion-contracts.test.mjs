@@ -164,3 +164,7 @@ assert.ok(out.exportPostsCsv([{...post,title:"  +1"}]).includes("'"+"  +1"));
 test("csv-neutralizes-at-titles", () => {
 assert.ok(out.exportPostsCsv([{...post,title:"@cmd"}]).includes("'"+"@cmd"));
 });
+
+test("csv-retains-demo-source-for-every-row", () => {
+const rows=out.exportPostsCsv([post,post]).trim().split('\r\n');assert.equal(rows.length,3);assert.ok(rows.slice(1).every(row=>row.endsWith('"Demo data"')));
+});
