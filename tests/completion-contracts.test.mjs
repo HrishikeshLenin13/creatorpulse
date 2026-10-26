@@ -156,3 +156,7 @@ assert.ok(out.exportPostsCsv([{...post,title:'A\nB'}]).includes('"A\nB"'));
 test("csv-neutralizes-equals-titles", () => {
 assert.ok(out.exportPostsCsv([{...post,title:"=SUM(A1)"}]).includes("'"+"=SUM(A1)"));
 });
+
+test("csv-neutralizes-leading-space-titles", () => {
+assert.ok(out.exportPostsCsv([{...post,title:"  +1"}]).includes("'"+"  +1"));
+});
