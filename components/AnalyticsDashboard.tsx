@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
+import { summarizePosts } from '@/lib/post-tools';
 import { exportPostsCsv } from '@/lib/export';
 
 export function AnalyticsDashboard() {
@@ -10,12 +11,15 @@ export function AnalyticsDashboard() {
   const [filter, setFilter] = useState<'7D' | '30D' | '90D'>('30D');
 
   const stats = useMemo(
-    () => [
-      { label: 'Total views', value: '1.2M', delta: '+18.4%' },
-      { label: 'Avg engagement', value: '12.1%', delta: '+2.3%' },
-      { label: 'Watch time', value: '42.6h', delta: '+11.8%' },
-      { label: 'Est. earnings', value: '$4,860', delta: '+9.7%' },
-    ],
+    () => {
+      const summary=summarizePosts(mockVideoMetrics);
+      return [
+        {label:'Total views',value:formatCompactNumber(summary.totalViews)},
+        {label:'Avg engagement',value:summary.engagementRate.toFixed(1)+'%'},
+        {label:'Watch time',value:summary.watchTimeHours.toFixed(1)+'h'},
+        {label:'Est. earnings',value:formatCurrency(summary.estimatedRevenue)},
+      ];
+    },
     [],
   );
 
@@ -66,7 +70,7 @@ export function AnalyticsDashboard() {
             <span className="muted-label">{stat.label}</span>
             <div className="stat-row">
               <strong>{stat.value}</strong>
-              <span className="delta up">{stat.delta}</span>
+
             </div>
           </div>
         ))}
