@@ -64,3 +64,7 @@ const rows=[{...post,title:'one',views:2},{...post,title:'two',views:1}];const s
 test("sort-engagementRate-asc", () => {
 const rows=[{...post,title:'one',engagementRate:2},{...post,title:'two',engagementRate:1}];const sorted=api.sortPosts(rows,'engagementRate','asc');assert.equal(sorted[0].title,'two');assert.equal(rows[0].title,'one');
 });
+
+test("sort-engagementRate-desc", () => {
+const rows=[{...post,title:'one',engagementRate:2},{...post,title:'two',engagementRate:1}];const sorted=api.sortPosts(rows,'engagementRate','desc');assert.equal(sorted[0].title,'one');assert.equal(rows[0].title,'one');
+});
