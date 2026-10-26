@@ -84,3 +84,7 @@ const a=[{...post,title:'a'},{...post,title:'b'}];assert.deepEqual(api.sortPosts
 test("invalid-sort-direction-fails-explicitly", () => {
 assert.throws(()=>api.sortPosts([post],'views','sideways'),RangeError);
 });
+
+test("sort-does-not-reuse-the-input-array", () => {
+const a=[post];assert.notEqual(api.sortPosts(a),a);assert.deepEqual(api.sortPosts(a),a);
+});
