@@ -128,3 +128,7 @@ assert.throws(()=>api.filterPostsByViews([post],-1),RangeError);
 test("view-threshold-rejects-nan", () => {
 assert.throws(()=>api.filterPostsByViews([post],NaN),RangeError);
 });
+
+test("view-threshold-rejects-infinite", () => {
+assert.throws(()=>api.filterPostsByViews([post],Infinity),RangeError);
+});
