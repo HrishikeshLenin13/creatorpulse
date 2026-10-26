@@ -16,3 +16,7 @@ const r=api.summarizePosts([{...post,views:-1}]);assert.ok(Object.values(r).ever
 test("summary-ignores-negative-likes", () => {
 const r=api.summarizePosts([{...post,likes:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
 });
+
+test("summary-ignores-negative-comments", () => {
+const r=api.summarizePosts([{...post,comments:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
+});
