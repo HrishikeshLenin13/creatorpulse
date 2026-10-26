@@ -568,6 +568,7 @@ button, input, select {
 }
 
 .dashboard-main {
+  min-width: 0;
   flex: 1;
   padding: 8px 6px 0;
 }
@@ -588,11 +589,13 @@ button, input, select {
 
 .workspace-shell {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 
 .workspace-toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -619,6 +622,7 @@ button, input, select {
 
 .toolbar-tabs {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
@@ -640,11 +644,16 @@ button, input, select {
 
 .toolbar-actions {
   display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: 12px;
 }
 
+.toolbar-actions input,
 .toolbar-actions select {
+  max-width: 100%;
   min-height: 40px;
   padding: 0 10px;
   border-radius: 10px;
@@ -1026,4 +1035,11 @@ td {
   .container {
     width: min(100% - 22px, 1200px);
   }
+}
+
+/* Let responsive panels shrink while tables scroll inside their own wrapper. */
+.workspace-shell > *,
+.content-grid > *,
+.bottom-strip > * {
+  min-width: 0;
 }
