@@ -8,3 +8,7 @@ const post={title:'Creator gear',views:100,likes:5,comments:2,shares:3,watchTime
 test("empty-post-list-has-explicit-zero-totals", () => {
 const s=api.summarizePosts([]);assert.equal(s.totalPosts,0);assert.equal(s.totalViews,0);assert.equal(s.engagementRate,0);
 });
+
+test("summary-ignores-negative-views", () => {
+const r=api.summarizePosts([{...post,views:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
+});
