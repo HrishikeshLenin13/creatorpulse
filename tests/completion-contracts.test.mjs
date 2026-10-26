@@ -100,3 +100,7 @@ assert.equal(api.filterPosts([post],'gear creator').length,1);
 test("search-requires-every-nonempty-term", () => {
 assert.equal(api.filterPosts([post],'creator absent').length,0);
 });
+
+test("search-trims-and-collapses-query-whitespace", () => {
+assert.equal(api.filterPosts([post],'  creator   gear ').length,1);
+});
