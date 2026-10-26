@@ -80,3 +80,7 @@ const rows=[{...post,title:'one',estimatedEarnings:2},{...post,title:'two',estim
 test("tied-sort-keys-preserve-source-order", () => {
 const a=[{...post,title:'a'},{...post,title:'b'}];assert.deepEqual(api.sortPosts(a).map(p=>p.title),['a','b']);
 });
+
+test("invalid-sort-direction-fails-explicitly", () => {
+assert.throws(()=>api.sortPosts([post],'views','sideways'),RangeError);
+});
