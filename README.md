@@ -39,3 +39,4 @@ The framework and React runtime are pinned in `package-lock.json` for reproducib
 ## Developer resources
 
 - [Feature usage and API contracts](docs/RECENT_IMPROVEMENTS.md)
+- [Troubleshooting and recovery](docs/TROUBLESHOOTING.md)
