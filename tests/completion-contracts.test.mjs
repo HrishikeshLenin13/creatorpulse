@@ -68,3 +68,7 @@ const rows=[{...post,title:'one',engagementRate:2},{...post,title:'two',engageme
 test("sort-engagementRate-desc", () => {
 const rows=[{...post,title:'one',engagementRate:2},{...post,title:'two',engagementRate:1}];const sorted=api.sortPosts(rows,'engagementRate','desc');assert.equal(sorted[0].title,'one');assert.equal(rows[0].title,'one');
 });
+
+test("sort-estimatedEarnings-asc", () => {
+const rows=[{...post,title:'one',estimatedEarnings:2},{...post,title:'two',estimatedEarnings:1}];const sorted=api.sortPosts(rows,'estimatedEarnings','asc');assert.equal(sorted[0].title,'two');assert.equal(rows[0].title,'one');
+});
