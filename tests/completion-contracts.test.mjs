@@ -132,3 +132,7 @@ assert.throws(()=>api.filterPostsByViews([post],NaN),RangeError);
 test("view-threshold-rejects-infinite", () => {
 assert.throws(()=>api.filterPostsByViews([post],Infinity),RangeError);
 });
+
+test("empty-json-export-keeps-demo-attribution", () => {
+const r=JSON.parse(out.exportPostsJson([]));assert.equal(r.source,'demo');assert.deepEqual(r.posts,[]);assert.equal(r.schemaVersion,1);
+});
