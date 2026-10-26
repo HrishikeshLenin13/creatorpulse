@@ -12,3 +12,7 @@ const s=api.summarizePosts([]);assert.equal(s.totalPosts,0);assert.equal(s.total
 test("summary-ignores-negative-views", () => {
 const r=api.summarizePosts([{...post,views:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
 });
+
+test("summary-ignores-negative-likes", () => {
+const r=api.summarizePosts([{...post,likes:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
+});
