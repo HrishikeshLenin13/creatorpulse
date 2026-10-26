@@ -104,3 +104,7 @@ assert.equal(api.filterPosts([post],'creator absent').length,0);
 test("search-trims-and-collapses-query-whitespace", () => {
 assert.equal(api.filterPosts([post],'  creator   gear ').length,1);
 });
+
+test("search-normalizes-composed-and-decomposed-accents", () => {
+assert.equal(api.filterPosts([{...post,title:'Café'}],'Cafe\u0301').length,1);
+});
