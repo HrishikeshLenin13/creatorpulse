@@ -28,3 +28,7 @@ const r=api.summarizePosts([{...post,shares:-1}]);assert.ok(Object.values(r).eve
 test("summary-ignores-negative-watchTime", () => {
 const r=api.summarizePosts([{...post,watchTime:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
 });
+
+test("summary-ignores-negative-estimatedEarnings", () => {
+const r=api.summarizePosts([{...post,estimatedEarnings:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
+});
