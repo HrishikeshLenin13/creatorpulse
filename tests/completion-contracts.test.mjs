@@ -136,3 +136,7 @@ assert.throws(()=>api.filterPostsByViews([post],Infinity),RangeError);
 test("empty-json-export-keeps-demo-attribution", () => {
 const r=JSON.parse(out.exportPostsJson([]));assert.equal(r.source,'demo');assert.deepEqual(r.posts,[]);assert.equal(r.schemaVersion,1);
 });
+
+test("json-export-allowlists-post-fields", () => {
+assert.ok(!out.exportPostsJson([{...post,password:'hidden'}]).includes('hidden'));
+});
