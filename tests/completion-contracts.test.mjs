@@ -108,3 +108,7 @@ assert.equal(api.filterPosts([post],'  creator   gear ').length,1);
 test("search-normalizes-composed-and-decomposed-accents", () => {
 assert.equal(api.filterPosts([{...post,title:'Café'}],'Cafe\u0301').length,1);
 });
+
+test("empty-search-retains-all-posts-in-source-order", () => {
+const rows=[post,{...post,title:'b'}];assert.deepEqual(api.filterPosts(rows,' '),rows);assert.notEqual(api.filterPosts(rows,''),rows);
+});
