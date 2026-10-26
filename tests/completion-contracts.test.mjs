@@ -48,3 +48,7 @@ assert.equal(api.summarizePosts([{...post,views:0}]).engagementRate,0);
 test("summary-saturates-overflowing-positive-sums", () => {
 const s=api.summarizePosts([{...post,views:Number.MAX_VALUE},{...post,views:Number.MAX_VALUE}]);assert.equal(s.totalViews,Number.MAX_VALUE);
 });
+
+test("summary-does-not-mutate-metric-records", () => {
+const p={...post},before=JSON.stringify(p);api.summarizePosts([p]);assert.equal(JSON.stringify(p),before);
+});
