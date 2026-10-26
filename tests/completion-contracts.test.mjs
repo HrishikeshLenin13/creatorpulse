@@ -76,3 +76,7 @@ const rows=[{...post,title:'one',estimatedEarnings:2},{...post,title:'two',estim
 test("sort-estimatedEarnings-desc", () => {
 const rows=[{...post,title:'one',estimatedEarnings:2},{...post,title:'two',estimatedEarnings:1}];const sorted=api.sortPosts(rows,'estimatedEarnings','desc');assert.equal(sorted[0].title,'one');assert.equal(rows[0].title,'one');
 });
+
+test("tied-sort-keys-preserve-source-order", () => {
+const a=[{...post,title:'a'},{...post,title:'b'}];assert.deepEqual(api.sortPosts(a).map(p=>p.title),['a','b']);
+});
