@@ -36,3 +36,7 @@ const r=api.summarizePosts([{...post,estimatedEarnings:-1}]);assert.ok(Object.va
 test("watch-time-seconds-convert-to-hours", () => {
 assert.equal(api.summarizePosts([{...post,watchTime:7200}]).watchTimeHours,2);
 });
+
+test("engagement-is-weighted-by-views-not-post-count", () => {
+const s=api.summarizePosts([{...post,views:100,likes:10,comments:0,shares:0},{...post,views:900,likes:0,comments:0,shares:0}]);assert.equal(s.engagementRate,1);
+});
