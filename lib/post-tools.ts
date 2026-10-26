@@ -9,8 +9,10 @@ export function summarizePosts(posts: readonly SummaryPost[]) {
 }
 
 export type PostSortKey = 'views' | 'engagementRate' | 'estimatedEarnings';
-export function sortPosts<T extends {views:number;engagementRate:number;estimatedEarnings:number}>(posts:readonly T[], key:PostSortKey='views'):T[] {
-  return posts.map((post,index)=>({post,index})).sort((a,b)=>finite(b.post[key])-finite(a.post[key]) || a.index-b.index).map(entry=>entry.post);
+export function sortPosts<T extends {views:number;engagementRate:number;estimatedEarnings:number}>(posts:readonly T[], key:PostSortKey='views', direction:'asc'|'desc'='desc'):T[] {
+  if (direction !== 'asc' && direction !== 'desc') throw new RangeError('Use asc or desc sort order.');
+  const sign = direction === 'asc' ? 1 : -1;
+  return posts.map((post,index)=>({post,index})).sort((a,b)=>sign*(finite(a.post[key])-finite(b.post[key])) || a.index-b.index).map(entry=>entry.post);
 }
 
 export function filterPosts<T extends {title:string}>(posts:readonly T[], query:string):T[] {

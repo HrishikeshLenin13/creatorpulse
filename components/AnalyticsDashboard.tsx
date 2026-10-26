@@ -10,7 +10,8 @@ export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
   const [sortBy, setSortBy] = useState<PostSortKey>('views');
   const [query,setQuery] = useState('');
-  const visiblePosts = useMemo(() => sortPosts(filterPosts(mockVideoMetrics,query),sortBy),[query,sortBy]);
+  const [sortDirection,setSortDirection] = useState<'asc'|'desc'>('desc');
+  const visiblePosts = useMemo(() => sortPosts(filterPosts(mockVideoMetrics,query),sortBy,sortDirection),[query,sortBy,sortDirection]);
 
   const stats = useMemo(
     () => {
@@ -59,10 +60,11 @@ export function AnalyticsDashboard() {
         <div className="toolbar-actions">
           <input aria-label="Search posts" placeholder="Search posts" value={query} onChange={event=>setQuery(event.target.value)} />
           <select aria-label="Sort posts" value={sortBy} onChange={(event) => setSortBy(event.target.value as PostSortKey)}>
-            <option value="views">Most views</option>
-            <option value="engagementRate">Highest engagement</option>
-            <option value="estimatedEarnings">Highest estimated earnings</option>
+            <option value="views">Views</option>
+            <option value="engagementRate">Engagement</option>
+            <option value="estimatedEarnings">Estimated earnings</option>
           </select>
+          <select aria-label="Sort direction" value={sortDirection} onChange={event=>setSortDirection(event.target.value as 'asc'|'desc')}><option value="desc">Highest first</option><option value="asc">Lowest first</option></select>
           <button type="button" className="primary-btn small-btn" onClick={() => downloadPosts("csv")}>Export CSV</button>
           <button type="button" className="primary-btn small-btn" onClick={() => downloadPosts("json")}>Export JSON</button>
         </div>
