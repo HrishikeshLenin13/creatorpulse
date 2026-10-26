@@ -16,6 +16,7 @@ export function sortPosts<T extends {views:number;engagementRate:number;estimate
 }
 
 export function filterPosts<T extends {title:string}>(posts:readonly T[], query:string):T[] {
-  const needle=query.trim().toLocaleLowerCase();
-  return posts.filter(post=>post.title.toLocaleLowerCase().includes(needle));
+  const normalize=(value:string)=>value.normalize('NFKD').replace(new RegExp('\\p{Mark}','gu'),'').toLowerCase();
+  const needles=normalize(query).trim().split(/\s+/).filter(Boolean);
+  return posts.filter(post=>{const title=normalize(post.title);return needles.every(needle=>title.includes(needle));});
 }
