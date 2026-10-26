@@ -96,3 +96,7 @@ assert.equal(api.filterPosts([post],'CREATOR').length,1);
 test("search-matches-terms-regardless-of-order", () => {
 assert.equal(api.filterPosts([post],'gear creator').length,1);
 });
+
+test("search-requires-every-nonempty-term", () => {
+assert.equal(api.filterPosts([post],'creator absent').length,0);
+});
