@@ -120,3 +120,7 @@ assert.equal(api.filterPostsByViews([post],100).length,1);assert.equal(api.filte
 test("view-threshold-does-not-mutate-input-posts", () => {
 const rows=[post];api.filterPostsByViews(rows,999);assert.equal(rows.length,1);
 });
+
+test("view-threshold-rejects-negative", () => {
+assert.throws(()=>api.filterPostsByViews([post],-1),RangeError);
+});
