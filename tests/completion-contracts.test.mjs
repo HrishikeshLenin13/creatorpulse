@@ -32,3 +32,7 @@ const r=api.summarizePosts([{...post,watchTime:-1}]);assert.ok(Object.values(r).
 test("summary-ignores-negative-estimatedEarnings", () => {
 const r=api.summarizePosts([{...post,estimatedEarnings:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
 });
+
+test("watch-time-seconds-convert-to-hours", () => {
+assert.equal(api.summarizePosts([{...post,watchTime:7200}]).watchTimeHours,2);
+});
