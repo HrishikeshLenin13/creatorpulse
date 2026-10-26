@@ -24,3 +24,7 @@ const r=api.summarizePosts([{...post,comments:-1}]);assert.ok(Object.values(r).e
 test("summary-ignores-negative-shares", () => {
 const r=api.summarizePosts([{...post,shares:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
 });
+
+test("summary-ignores-negative-watchTime", () => {
+const r=api.summarizePosts([{...post,watchTime:-1}]);assert.ok(Object.values(r).every(Number.isFinite));assert.ok(Object.values(r).every(v=>v>=0));
+});
