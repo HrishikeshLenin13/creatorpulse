@@ -88,3 +88,7 @@ assert.throws(()=>api.sortPosts([post],'views','sideways'),RangeError);
 test("sort-does-not-reuse-the-input-array", () => {
 const a=[post];assert.notEqual(api.sortPosts(a),a);assert.deepEqual(api.sortPosts(a),a);
 });
+
+test("search-matches-case-insensitively", () => {
+assert.equal(api.filterPosts([post],'CREATOR').length,1);
+});
