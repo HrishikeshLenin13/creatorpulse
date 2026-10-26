@@ -14,7 +14,9 @@ export function formatCurrency(value: number) {
 }
 
 export function estimateEarnings(views: number, engagementRate: number) {
+  if (![views, engagementRate].every(value => Number.isFinite(value) && value >= 0)) return 0;
   const baseCpm = 2.3;
   const engagementBoost = 1 + engagementRate / 100;
-  return Number(((views / 1000) * baseCpm * engagementBoost).toFixed(2));
+  const value=(views / 1000) * baseCpm * engagementBoost;
+  return Number.isFinite(value) ? Number(value.toFixed(2)) : 0;
 }
