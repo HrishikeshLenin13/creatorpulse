@@ -176,3 +176,7 @@ for(const value of [-1,NaN,Infinity])assert.equal(utils.estimateEarnings(value,1
 test("earnings-do-not-accept-invalid-engagement-inputs", () => {
 for(const value of [-1,NaN,Infinity])assert.equal(utils.estimateEarnings(100,value),0);
 });
+
+test("earnings-overflow-is-not-presented-as-infinite-revenue", () => {
+assert.equal(utils.estimateEarnings(Number.MAX_VALUE,Number.MAX_VALUE),0);
+});
