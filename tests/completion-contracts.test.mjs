@@ -144,3 +144,7 @@ assert.ok(!out.exportPostsJson([{...post,password:'hidden'}]).includes('hidden')
 test("json-export-preserves-visible-order", () => {
 assert.deepEqual(JSON.parse(out.exportPostsJson([{...post,title:'z'},post])).posts.map(p=>p.title),['z',post.title]);
 });
+
+test("csv-escapes-quoted-post-titles", () => {
+assert.ok(out.exportPostsCsv([{...post,title:'A "quote"'}]).includes('A ""quote""'));
+});
