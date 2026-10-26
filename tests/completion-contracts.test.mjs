@@ -152,3 +152,7 @@ assert.ok(out.exportPostsCsv([{...post,title:'A "quote"'}]).includes('A ""quote"
 test("csv-quotes-multiline-post-titles", () => {
 assert.ok(out.exportPostsCsv([{...post,title:'A\nB'}]).includes('"A\nB"'));
 });
+
+test("csv-neutralizes-equals-titles", () => {
+assert.ok(out.exportPostsCsv([{...post,title:"=SUM(A1)"}]).includes("'"+"=SUM(A1)"));
+});
