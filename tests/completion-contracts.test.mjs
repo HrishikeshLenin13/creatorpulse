@@ -44,3 +44,7 @@ const s=api.summarizePosts([{...post,views:100,likes:10,comments:0,shares:0},{..
 test("zero-view-totals-do-not-divide-by-zero", () => {
 assert.equal(api.summarizePosts([{...post,views:0}]).engagementRate,0);
 });
+
+test("summary-saturates-overflowing-positive-sums", () => {
+const s=api.summarizePosts([{...post,views:Number.MAX_VALUE},{...post,views:Number.MAX_VALUE}]);assert.equal(s.totalViews,Number.MAX_VALUE);
+});
