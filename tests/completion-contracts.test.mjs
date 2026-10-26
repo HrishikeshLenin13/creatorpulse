@@ -140,3 +140,7 @@ const r=JSON.parse(out.exportPostsJson([]));assert.equal(r.source,'demo');assert
 test("json-export-allowlists-post-fields", () => {
 assert.ok(!out.exportPostsJson([{...post,password:'hidden'}]).includes('hidden'));
 });
+
+test("json-export-preserves-visible-order", () => {
+assert.deepEqual(JSON.parse(out.exportPostsJson([{...post,title:'z'},post])).posts.map(p=>p.title),['z',post.title]);
+});
