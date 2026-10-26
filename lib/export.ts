@@ -17,3 +17,7 @@ export function exportPostsCsv(posts: ExportPost[]): string {
     post.shares, post.engagementRate, 'Demo data']);
   return [header, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n') + '\r\n';
 }
+
+export function exportPostsJson(posts: ExportPost[]): string {
+  return JSON.stringify({schemaVersion:1,source:'demo',posts:posts.map(post=>({title:post.title,views:post.views,likes:post.likes,comments:post.comments,shares:post.shares,engagementRate:post.engagementRate}))},null,2)+'\n';
+}

@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
 import { summarizePosts, sortPosts, filterPosts, type PostSortKey } from '@/lib/post-tools';
-import { exportPostsCsv } from '@/lib/export';
+import { exportPostsCsv, exportPostsJson } from '@/lib/export';
 
 export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
@@ -25,11 +25,11 @@ export function AnalyticsDashboard() {
     [visiblePosts],
   );
 
-  function downloadPosts() {
-    const url = URL.createObjectURL(new Blob([exportPostsCsv(visiblePosts)], { type: 'text/csv;charset=utf-8' }));
+  function downloadPosts(format: "csv" | "json" = "csv") {
+    const url = URL.createObjectURL(new Blob([format === 'json' ? exportPostsJson(visiblePosts) : exportPostsCsv(visiblePosts)], { type: format === 'json' ? 'application/json' : 'text/csv;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'creatorpulse-demo-posts.csv';
+    link.download = `creatorpulse-demo-posts.${format}`;
     document.body.append(link);
     link.click();
     link.remove();
@@ -63,7 +63,8 @@ export function AnalyticsDashboard() {
             <option value="engagementRate">Highest engagement</option>
             <option value="estimatedEarnings">Highest estimated earnings</option>
           </select>
-          <button type="button" className="primary-btn small-btn" onClick={downloadPosts}>Export CSV</button>
+          <button type="button" className="primary-btn small-btn" onClick={() => downloadPosts("csv")}>Export CSV</button>
+          <button type="button" className="primary-btn small-btn" onClick={() => downloadPosts("json")}>Export JSON</button>
         </div>
       </div>
 
