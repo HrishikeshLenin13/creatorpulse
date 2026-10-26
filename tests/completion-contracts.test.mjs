@@ -160,3 +160,7 @@ assert.ok(out.exportPostsCsv([{...post,title:"=SUM(A1)"}]).includes("'"+"=SUM(A1
 test("csv-neutralizes-leading-space-titles", () => {
 assert.ok(out.exportPostsCsv([{...post,title:"  +1"}]).includes("'"+"  +1"));
 });
+
+test("csv-neutralizes-at-titles", () => {
+assert.ok(out.exportPostsCsv([{...post,title:"@cmd"}]).includes("'"+"@cmd"));
+});
