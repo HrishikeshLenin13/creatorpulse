@@ -116,3 +116,7 @@ const rows=[post,{...post,title:'b'}];assert.deepEqual(api.filterPosts(rows,' ')
 test("view-threshold-includes-exact-boundary", () => {
 assert.equal(api.filterPostsByViews([post],100).length,1);assert.equal(api.filterPostsByViews([post],101).length,0);
 });
+
+test("view-threshold-does-not-mutate-input-posts", () => {
+const rows=[post];api.filterPostsByViews(rows,999);assert.equal(rows.length,1);
+});
