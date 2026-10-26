@@ -172,3 +172,7 @@ const rows=out.exportPostsCsv([post,post]).trim().split('\r\n');assert.equal(row
 test("earnings-do-not-accept-invalid-view-inputs", () => {
 for(const value of [-1,NaN,Infinity])assert.equal(utils.estimateEarnings(value,10),0);
 });
+
+test("earnings-do-not-accept-invalid-engagement-inputs", () => {
+for(const value of [-1,NaN,Infinity])assert.equal(utils.estimateEarnings(100,value),0);
+});
