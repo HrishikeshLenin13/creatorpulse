@@ -11,3 +11,8 @@ export type PostSortKey = 'views' | 'engagementRate' | 'estimatedEarnings';
 export function sortPosts<T extends {views:number;engagementRate:number;estimatedEarnings:number}>(posts:readonly T[], key:PostSortKey='views'):T[] {
   return posts.map((post,index)=>({post,index})).sort((a,b)=>finite(b.post[key])-finite(a.post[key]) || a.index-b.index).map(entry=>entry.post);
 }
+
+export function filterPosts<T extends {title:string}>(posts:readonly T[], query:string):T[] {
+  const needle=query.trim().toLocaleLowerCase();
+  return posts.filter(post=>post.title.toLocaleLowerCase().includes(needle));
+}

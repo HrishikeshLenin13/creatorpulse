@@ -3,13 +3,14 @@
 import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
-import { summarizePosts, sortPosts, type PostSortKey } from '@/lib/post-tools';
+import { summarizePosts, sortPosts, filterPosts, type PostSortKey } from '@/lib/post-tools';
 import { exportPostsCsv } from '@/lib/export';
 
 export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
   const [sortBy, setSortBy] = useState<PostSortKey>('views');
-  const visiblePosts = useMemo(() => sortPosts(mockVideoMetrics,sortBy),[sortBy]);
+  const [query,setQuery] = useState('');
+  const visiblePosts = useMemo(() => sortPosts(filterPosts(mockVideoMetrics,query),sortBy),[query,sortBy]);
 
   const stats = useMemo(
     () => {
@@ -56,6 +57,7 @@ export function AnalyticsDashboard() {
         </div>
 
         <div className="toolbar-actions">
+          <input aria-label="Search posts" placeholder="Search posts" value={query} onChange={event=>setQuery(event.target.value)} />
           <select aria-label="Sort posts" value={sortBy} onChange={(event) => setSortBy(event.target.value as PostSortKey)}>
             <option value="views">Most views</option>
             <option value="engagementRate">Highest engagement</option>
@@ -141,6 +143,7 @@ export function AnalyticsDashboard() {
               </tr>
             </thead>
             <tbody>
+              {!visiblePosts.length ? <tr><td colSpan={6}>No posts match this search.</td></tr> : null}
               {visiblePosts.map((video) => (
                 <tr key={video.id}>
                   <td>{video.title}</td>
