@@ -148,3 +148,7 @@ assert.deepEqual(JSON.parse(out.exportPostsJson([{...post,title:'z'},post])).pos
 test("csv-escapes-quoted-post-titles", () => {
 assert.ok(out.exportPostsCsv([{...post,title:'A "quote"'}]).includes('A ""quote""'));
 });
+
+test("csv-quotes-multiline-post-titles", () => {
+assert.ok(out.exportPostsCsv([{...post,title:'A\nB'}]).includes('"A\nB"'));
+});
