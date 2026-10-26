@@ -3,16 +3,17 @@
 import { useMemo, useState } from 'react';
 import { formatCompactNumber, formatCurrency } from '@/lib/utils';
 import { mockVideoMetrics, revenueSources } from '@/lib/data';
-import { summarizePosts } from '@/lib/post-tools';
+import { summarizePosts, sortPosts, type PostSortKey } from '@/lib/post-tools';
 import { exportPostsCsv } from '@/lib/export';
 
 export function AnalyticsDashboard() {
   const [selectedSegment, setSelectedSegment] = useState<'Overview' | 'Posts' | 'Audience' | 'Revenue'>('Overview');
-  const [filter, setFilter] = useState<'7D' | '30D' | '90D'>('30D');
+  const [sortBy, setSortBy] = useState<PostSortKey>('views');
+  const visiblePosts = useMemo(() => sortPosts(mockVideoMetrics,sortBy),[sortBy]);
 
   const stats = useMemo(
     () => {
-      const summary=summarizePosts(mockVideoMetrics);
+      const summary=summarizePosts(visiblePosts);
       return [
         {label:'Total views',value:formatCompactNumber(summary.totalViews)},
         {label:'Avg engagement',value:summary.engagementRate.toFixed(1)+'%'},
@@ -20,11 +21,11 @@ export function AnalyticsDashboard() {
         {label:'Est. earnings',value:formatCurrency(summary.estimatedRevenue)},
       ];
     },
-    [],
+    [visiblePosts],
   );
 
   function downloadPosts() {
-    const url = URL.createObjectURL(new Blob([exportPostsCsv(mockVideoMetrics)], { type: 'text/csv;charset=utf-8' }));
+    const url = URL.createObjectURL(new Blob([exportPostsCsv(visiblePosts)], { type: 'text/csv;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
     link.download = 'creatorpulse-demo-posts.csv';
@@ -55,10 +56,10 @@ export function AnalyticsDashboard() {
         </div>
 
         <div className="toolbar-actions">
-          <select value={filter} onChange={(event) => setFilter(event.target.value as any)}>
-            <option value="7D">7D</option>
-            <option value="30D">30D</option>
-            <option value="90D">90D</option>
+          <select aria-label="Sort posts" value={sortBy} onChange={(event) => setSortBy(event.target.value as PostSortKey)}>
+            <option value="views">Most views</option>
+            <option value="engagementRate">Highest engagement</option>
+            <option value="estimatedEarnings">Highest estimated earnings</option>
           </select>
           <button type="button" className="primary-btn small-btn" onClick={downloadPosts}>Export CSV</button>
         </div>
@@ -140,7 +141,7 @@ export function AnalyticsDashboard() {
               </tr>
             </thead>
             <tbody>
-              {mockVideoMetrics.map((video) => (
+              {visiblePosts.map((video) => (
                 <tr key={video.id}>
                   <td>{video.title}</td>
                   <td>{formatCompactNumber(video.views)}</td>
