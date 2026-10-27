@@ -54,3 +54,7 @@ const p={...post,title:"\t=1"};const rows=csvRows(out.exportPostsCsv([p]));asser
 test("csv-title-roundtrip-line-leading", () => {
 const p={...post,title:"\nlabel"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"'\nlabel");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-empty", () => {
+const p={...post,title:""};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
