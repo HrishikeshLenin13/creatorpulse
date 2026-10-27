@@ -150,3 +150,7 @@ const p={views:0,likes:0,comments:0,shares:0,watchTime:0,estimatedEarnings:0};co
 test("metric-sanitization-6", () => {
 const p={views:null,likes:0,comments:0,shares:0,watchTime:null,estimatedEarnings:null};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
 });
+
+test("metric-sanitization-7", () => {
+const p={views:'100',likes:0,comments:0,shares:0,watchTime:'100',estimatedEarnings:'100'};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
+});
