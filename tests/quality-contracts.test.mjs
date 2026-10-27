@@ -118,3 +118,7 @@ const p=Object.freeze({...post,title:"\u03ac\u03bb\u03c6\u03b1"});const input=Ob
 test("unicode-search-contract-case", () => {
 const p=Object.freeze({...post,title:"MiXeD"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"mixed"),[p]);assert.deepEqual(api.filterPosts(input,"mixed absent"),[]);assert.equal(p.title,"MiXeD");
 });
+
+test("unicode-search-contract-tabs", () => {
+const p=Object.freeze({...post,title:"Video Camera"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"video\tcamera"),[p]);assert.deepEqual(api.filterPosts(input,"video\tcamera absent"),[]);assert.equal(p.title,"Video Camera");
+});
