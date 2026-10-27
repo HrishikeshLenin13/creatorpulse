@@ -186,3 +186,7 @@ const p={views:Number.MIN_VALUE,likes:0,comments:0,shares:0,watchTime:Number.MIN
 test("metric-sanitization-15", () => {
 const p={views:Number.MAX_VALUE,likes:0,comments:0,shares:0,watchTime:Number.MAX_VALUE,estimatedEarnings:Number.MAX_VALUE};const s=api.summarizePosts([p]);assert.equal(s.totalViews,Number.MAX_VALUE);assert.equal(s.watchTimeHours,Number.MAX_VALUE/3600);assert.equal(s.estimatedRevenue,Number.MAX_VALUE);assert.ok(Object.values(s).every(Number.isFinite));
 });
+
+test("stable-sort-views-asc-1", () => {
+const input=Object.freeze([{...post,id:'a',views:1},{...post,id:'b',views:NaN},{...post,id:'c',views:1},{...post,id:'d',views:0}].map(Object.freeze));const sorted=api.sortPosts(input,"views","asc");assert.deepEqual(sorted.map(p=>p.id),["b", "d", "a", "c"]);assert.deepEqual(input.map(p=>p.id),['a','b','c','d']);assert.equal(sorted[0],input[1]);
+});
