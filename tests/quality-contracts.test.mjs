@@ -106,3 +106,7 @@ const p=Object.freeze({...post,title:"\uff26\uff35\uff2c\uff2c"});const input=Ob
 test("unicode-search-contract-circled", () => {
 const p=Object.freeze({...post,title:"\u2460 ideas"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"1"),[p]);assert.deepEqual(api.filterPosts(input,"1 absent"),[]);assert.equal(p.title,"\u2460 ideas");
 });
+
+test("unicode-search-contract-space-order", () => {
+const p=Object.freeze({...post,title:"Camera Gear Review"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"review camera"),[p]);assert.deepEqual(api.filterPosts(input,"review camera absent"),[]);assert.equal(p.title,"Camera Gear Review");
+});
