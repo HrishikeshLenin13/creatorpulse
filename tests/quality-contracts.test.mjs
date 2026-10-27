@@ -90,3 +90,7 @@ const p=Object.freeze({...post,title:"Fa\u00e7ade"});const input=Object.freeze([
 test("unicode-search-contract-macron", () => {
 const p=Object.freeze({...post,title:"T\u014dky\u014d"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"tokyo"),[p]);assert.deepEqual(api.filterPosts(input,"tokyo absent"),[]);assert.equal(p.title,"T\u014dky\u014d");
 });
+
+test("unicode-search-contract-combining", () => {
+const p=Object.freeze({...post,title:"Cafe\u0301"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"cafe"),[p]);assert.deepEqual(api.filterPosts(input,"cafe absent"),[]);assert.equal(p.title,"Cafe\u0301");
+});
