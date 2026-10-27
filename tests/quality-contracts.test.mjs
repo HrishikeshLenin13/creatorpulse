@@ -126,3 +126,7 @@ const p=Object.freeze({...post,title:"Video Camera"});const input=Object.freeze(
 test("unicode-search-contract-emoji", () => {
 const p=Object.freeze({...post,title:"\ud83c\udfa5 camera"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"\ud83c\udfa5"),[p]);assert.deepEqual(api.filterPosts(input,"\ud83c\udfa5 absent"),[]);assert.equal(p.title,"\ud83c\udfa5 camera");
 });
+
+test("metric-sanitization-1", () => {
+const p={views:NaN,likes:0,comments:0,shares:0,watchTime:NaN,estimatedEarnings:NaN};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
+});
