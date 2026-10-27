@@ -10,3 +10,7 @@ function csvRows(source){const rows=[];let row=[],cell='',quoted=false;for(let i
 test("csv-title-roundtrip-comma", () => {
 const p={...post,title:"A, B"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"A, B");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-quote", () => {
+const p={...post,title:"A \"B\""};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"A \"B\"");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
