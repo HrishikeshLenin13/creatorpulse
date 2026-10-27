@@ -146,3 +146,7 @@ const p={views:-1,likes:0,comments:0,shares:0,watchTime:-1,estimatedEarnings:-1}
 test("metric-sanitization-5", () => {
 const p={views:0,likes:0,comments:0,shares:0,watchTime:0,estimatedEarnings:0};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
 });
+
+test("metric-sanitization-6", () => {
+const p={views:null,likes:0,comments:0,shares:0,watchTime:null,estimatedEarnings:null};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
+});
