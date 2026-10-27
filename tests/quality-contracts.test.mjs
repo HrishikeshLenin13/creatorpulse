@@ -102,3 +102,7 @@ const p=Object.freeze({...post,title:"\ufb00 tools"});const input=Object.freeze(
 test("unicode-search-contract-fullwidth", () => {
 const p=Object.freeze({...post,title:"\uff26\uff35\uff2c\uff2c"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"full"),[p]);assert.deepEqual(api.filterPosts(input,"full absent"),[]);assert.equal(p.title,"\uff26\uff35\uff2c\uff2c");
 });
+
+test("unicode-search-contract-circled", () => {
+const p=Object.freeze({...post,title:"\u2460 ideas"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"1"),[p]);assert.deepEqual(api.filterPosts(input,"1 absent"),[]);assert.equal(p.title,"\u2460 ideas");
+});
