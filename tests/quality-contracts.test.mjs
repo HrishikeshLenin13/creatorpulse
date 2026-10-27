@@ -294,3 +294,7 @@ const a={...post,views:407,likes:10,comments:2,shares:1,watchTime:1221,estimated
 test("visible-summary-partition-12", () => {
 const a={...post,views:444,likes:11,comments:3,shares:2,watchTime:1332,estimatedEarnings:12};const b={...post,views:888,likes:22,comments:6,shares:4,watchTime:2664,estimatedEarnings:24};const result=api.summarizePosts([a,b]);assert.equal(result.totalViews,1332);assert.ok(Math.abs(result.engagementRate-3.6036036036036037)<1e-10);assert.equal(result.estimatedRevenue,36);assert.equal(api.filterPostsByViews([a,b],445).length,1);assert.equal(JSON.parse(out.exportPostsJson([a,b])).posts.length,2);
 });
+
+test("visible-summary-partition-13", () => {
+const a={...post,views:481,likes:12,comments:0,shares:0,watchTime:1443,estimatedEarnings:13};const b={...post,views:962,likes:24,comments:0,shares:0,watchTime:2886,estimatedEarnings:26};const result=api.summarizePosts([a,b]);assert.equal(result.totalViews,1443);assert.ok(Math.abs(result.engagementRate-2.494802494802495)<1e-10);assert.equal(result.estimatedRevenue,39);assert.equal(api.filterPostsByViews([a,b],482).length,1);assert.equal(JSON.parse(out.exportPostsJson([a,b])).posts.length,2);
+});
