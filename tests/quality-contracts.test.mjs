@@ -114,3 +114,7 @@ const p=Object.freeze({...post,title:"Camera Gear Review"});const input=Object.f
 test("unicode-search-contract-greek", () => {
 const p=Object.freeze({...post,title:"\u03ac\u03bb\u03c6\u03b1"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"\u03b1\u03bb\u03c6\u03b1"),[p]);assert.deepEqual(api.filterPosts(input,"\u03b1\u03bb\u03c6\u03b1 absent"),[]);assert.equal(p.title,"\u03ac\u03bb\u03c6\u03b1");
 });
+
+test("unicode-search-contract-case", () => {
+const p=Object.freeze({...post,title:"MiXeD"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"mixed"),[p]);assert.deepEqual(api.filterPosts(input,"mixed absent"),[]);assert.equal(p.title,"MiXeD");
+});
