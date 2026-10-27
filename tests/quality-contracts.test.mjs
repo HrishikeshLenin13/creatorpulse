@@ -130,3 +130,7 @@ const p=Object.freeze({...post,title:"\ud83c\udfa5 camera"});const input=Object.
 test("metric-sanitization-1", () => {
 const p={views:NaN,likes:0,comments:0,shares:0,watchTime:NaN,estimatedEarnings:NaN};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
 });
+
+test("metric-sanitization-2", () => {
+const p={views:Infinity,likes:0,comments:0,shares:0,watchTime:Infinity,estimatedEarnings:Infinity};const s=api.summarizePosts([p]);assert.equal(s.totalViews,0);assert.equal(s.watchTimeHours,0);assert.equal(s.estimatedRevenue,0);assert.ok(Object.values(s).every(Number.isFinite));
+});
