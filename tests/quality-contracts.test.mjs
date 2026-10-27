@@ -246,3 +246,7 @@ const input=Object.freeze([{...post,id:'a',engagementRate:14},{...post,id:'b',en
 test("stable-sort-estimatedEarnings-asc-15", () => {
 const input=Object.freeze([{...post,id:'a',estimatedEarnings:15},{...post,id:'b',estimatedEarnings:NaN},{...post,id:'c',estimatedEarnings:15},{...post,id:'d',estimatedEarnings:0}].map(Object.freeze));const sorted=api.sortPosts(input,"estimatedEarnings","asc");assert.deepEqual(sorted.map(p=>p.id),["b", "d", "a", "c"]);assert.deepEqual(input.map(p=>p.id),['a','b','c','d']);assert.equal(sorted[0],input[1]);
 });
+
+test("visible-summary-partition-1", () => {
+const a={...post,views:37,likes:0,comments:0,shares:0,watchTime:111,estimatedEarnings:1};const b={...post,views:74,likes:0,comments:0,shares:0,watchTime:222,estimatedEarnings:2};const result=api.summarizePosts([a,b]);assert.equal(result.totalViews,111);assert.ok(Math.abs(result.engagementRate-0.0)<1e-10);assert.equal(result.estimatedRevenue,3);assert.equal(api.filterPostsByViews([a,b],38).length,1);assert.equal(JSON.parse(out.exportPostsJson([a,b])).posts.length,2);
+});
