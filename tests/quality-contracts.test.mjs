@@ -46,3 +46,7 @@ const p={...post,title:"@test"};const rows=csvRows(out.exportPostsCsv([p]));asse
 test("csv-title-roundtrip-spaced-formula", () => {
 const p={...post,title:"  =1+2"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"'  =1+2");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-tab-formula", () => {
+const p={...post,title:"\t=1"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"'\t=1");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
