@@ -78,3 +78,7 @@ const p=Object.freeze({...post,title:"\u00c5ngstr\u00f6m"});const input=Object.f
 test("unicode-search-contract-diaeresis", () => {
 const p=Object.freeze({...post,title:"\u00dcber ideas"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"uber"),[p]);assert.deepEqual(api.filterPosts(input,"uber absent"),[]);assert.equal(p.title,"\u00dcber ideas");
 });
+
+test("unicode-search-contract-tilde", () => {
+const p=Object.freeze({...post,title:"Ma\u00f1ana"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"manana"),[p]);assert.deepEqual(api.filterPosts(input,"manana absent"),[]);assert.equal(p.title,"Ma\u00f1ana");
+});
