@@ -98,3 +98,7 @@ const p=Object.freeze({...post,title:"Cafe\u0301"});const input=Object.freeze([p
 test("unicode-search-contract-ligature", () => {
 const p=Object.freeze({...post,title:"\ufb00 tools"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"ff"),[p]);assert.deepEqual(api.filterPosts(input,"ff absent"),[]);assert.equal(p.title,"\ufb00 tools");
 });
+
+test("unicode-search-contract-fullwidth", () => {
+const p=Object.freeze({...post,title:"\uff26\uff35\uff2c\uff2c"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"full"),[p]);assert.deepEqual(api.filterPosts(input,"full absent"),[]);assert.equal(p.title,"\uff26\uff35\uff2c\uff2c");
+});
