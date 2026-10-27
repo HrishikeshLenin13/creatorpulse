@@ -70,3 +70,7 @@ const p={...post,title:"<script>title</script>"};const rows=csvRows(out.exportPo
 test("unicode-search-contract-accent", () => {
 const p=Object.freeze({...post,title:"Caf\u00e9 guide"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"cafe"),[p]);assert.deepEqual(api.filterPosts(input,"cafe absent"),[]);assert.equal(p.title,"Caf\u00e9 guide");
 });
+
+test("unicode-search-contract-ring", () => {
+const p=Object.freeze({...post,title:"\u00c5ngstr\u00f6m"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"angstrom"),[p]);assert.deepEqual(api.filterPosts(input,"angstrom absent"),[]);assert.equal(p.title,"\u00c5ngstr\u00f6m");
+});
