@@ -22,3 +22,7 @@ const p={...post,title:"A\r\nB"};const rows=csvRows(out.exportPostsCsv([p]));ass
 test("csv-title-roundtrip-tab", () => {
 const p={...post,title:"A\tB"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"A\tB");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-unicode", () => {
+const p={...post,title:"Caf\u00e9 \u5b66\u7fd2 \ud83d\udcda"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"Caf\u00e9 \u5b66\u7fd2 \ud83d\udcda");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
