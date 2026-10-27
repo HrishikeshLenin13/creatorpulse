@@ -30,3 +30,7 @@ const p={...post,title:"Caf\u00e9 \u5b66\u7fd2 \ud83d\udcda"};const rows=csvRows
 test("csv-title-roundtrip-formula", () => {
 const p={...post,title:"=SUM(A1:A2)"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"'=SUM(A1:A2)");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-plus", () => {
+const p={...post,title:"+2+3"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"'+2+3");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
