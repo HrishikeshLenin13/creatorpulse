@@ -202,3 +202,7 @@ const input=Object.freeze([{...post,id:'a',estimatedEarnings:3},{...post,id:'b',
 test("stable-sort-views-desc-4", () => {
 const input=Object.freeze([{...post,id:'a',views:4},{...post,id:'b',views:NaN},{...post,id:'c',views:4},{...post,id:'d',views:0}].map(Object.freeze));const sorted=api.sortPosts(input,"views","desc");assert.deepEqual(sorted.map(p=>p.id),["a", "c", "b", "d"]);assert.deepEqual(input.map(p=>p.id),['a','b','c','d']);assert.equal(sorted[0],input[0]);
 });
+
+test("stable-sort-engagementRate-desc-5", () => {
+const input=Object.freeze([{...post,id:'a',engagementRate:5},{...post,id:'b',engagementRate:NaN},{...post,id:'c',engagementRate:5},{...post,id:'d',engagementRate:0}].map(Object.freeze));const sorted=api.sortPosts(input,"engagementRate","desc");assert.deepEqual(sorted.map(p=>p.id),["a", "c", "b", "d"]);assert.deepEqual(input.map(p=>p.id),['a','b','c','d']);assert.equal(sorted[0],input[0]);
+});
