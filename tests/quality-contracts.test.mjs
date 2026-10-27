@@ -122,3 +122,7 @@ const p=Object.freeze({...post,title:"MiXeD"});const input=Object.freeze([p]);as
 test("unicode-search-contract-tabs", () => {
 const p=Object.freeze({...post,title:"Video Camera"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"video\tcamera"),[p]);assert.deepEqual(api.filterPosts(input,"video\tcamera absent"),[]);assert.equal(p.title,"Video Camera");
 });
+
+test("unicode-search-contract-emoji", () => {
+const p=Object.freeze({...post,title:"\ud83c\udfa5 camera"});const input=Object.freeze([p]);assert.deepEqual(api.filterPosts(input,"\ud83c\udfa5"),[p]);assert.deepEqual(api.filterPosts(input,"\ud83c\udfa5 absent"),[]);assert.equal(p.title,"\ud83c\udfa5 camera");
+});
