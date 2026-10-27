@@ -62,3 +62,7 @@ const p={...post,title:""};const rows=csvRows(out.exportPostsCsv([p]));assert.eq
 test("csv-title-roundtrip-backslash", () => {
 const p={...post,title:"A\\B"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"A\\B");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
 });
+
+test("csv-title-roundtrip-html", () => {
+const p={...post,title:"<script>title</script>"};const rows=csvRows(out.exportPostsCsv([p]));assert.equal(rows.length,2);assert.equal(rows[1].length,7);assert.equal(rows[1][0],"<script>title</script>");assert.equal(rows[1][6],'Demo data');assert.equal(JSON.parse(out.exportPostsJson([p])).posts[0].title,p.title);
+});
