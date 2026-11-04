@@ -1,3 +1,4 @@
+const searchMarks=new RegExp('\\p{Mark}','gu');
 type SummaryPost = {views:number;likes:number;comments:number;shares:number;watchTime?:number;estimatedEarnings?:number};
 const addFinite = (a:number,b:number) => Math.min(Number.MAX_VALUE,a+b);
 const finite = (value:number|undefined) => typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0;
@@ -16,7 +17,7 @@ export function sortPosts<T extends {views:number;engagementRate:number;estimate
 }
 
 export function filterPosts<T extends {title:string}>(posts:readonly T[], query:string):T[] {
-  const normalize=(value:string)=>value.normalize('NFKD').replace(new RegExp('\\p{Mark}','gu'),'').toLowerCase();
+  const normalize=(value:string)=>value.normalize('NFKD').replace(searchMarks,'').toLowerCase();
   const needles=normalize(query).trim().split(/\s+/).filter(Boolean);
   return posts.filter(post=>{const title=normalize(post.title);return needles.every(needle=>title.includes(needle));});
 }
