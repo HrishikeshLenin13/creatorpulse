@@ -25,3 +25,10 @@ export function filterPostsByViews<T extends {views:number}>(posts:readonly T[],
   if (!Number.isFinite(minimum) || minimum < 0) throw new RangeError('Minimum views must be finite and nonnegative.');
   return posts.filter(post=>finite(post.views)>=minimum);
 }
+
+/** Group the supplied visible/demo posts without introducing live provider claims. */
+export function summarizePostsByPlatform<T extends SummaryPost & {platform?:string}>(posts:readonly T[]) {
+  const groups=new Map<string,T[]>();
+  for(const post of posts){const platform=typeof post.platform==='string'&&post.platform.trim()?post.platform.trim().toLowerCase():'other';const group=groups.get(platform);if(group)group.push(post);else groups.set(platform,[post]);}
+  return Array.from(groups).sort(([a],[b])=>a<b?-1:a>b?1:0).map(([platform,items])=>({platform,...summarizePosts(items)}));
+}
